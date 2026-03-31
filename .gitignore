@@ -209,3 +209,9 @@ __marimo__/
 # Project Artifacts & Logs
 artifacts/
 logs/
+
+# dataset
+research/MRI_Images/
+*.jpg
+*.png
+data/
