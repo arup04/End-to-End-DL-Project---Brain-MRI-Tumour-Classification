@@ -1,0 +1,7 @@
+[project]
+name = "end-to-end-dl-project-brain-mri-tumour-classification"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
