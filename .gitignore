@@ -1,0 +1,102 @@
+# ==========================================
+# 1. PYTHON ARTIFACTS & CACHED FILES
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ==========================================
+# 2. VIRTUAL ENVIRONMENTS
+# ==========================================
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# ==========================================
+# 3. ENVIRONMENT VARIABLES (CRITICAL FOR SECURITY)
+# ==========================================
+# NEVER commit your AWS keys or API keys!
+.env
+.env.local
+.env.*.local
+
+# ==========================================
+# 4. PROJECT ARTIFACTS (DATA & MODELS)
+# ==========================================
+# Ignore the contents of the artifacts folder, 
+# but keep the directories tracked via .gitkeep
+artifacts/data/*
+!artifacts/data/.gitkeep
+
+artifacts/models/*
+!artifacts/models/.gitkeep
+
+artifacts/logs/*
+!artifacts/logs/.gitkeep
+
+# ==========================================
+# 5. JUPYTER NOTEBOOKS
+# ==========================================
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ==========================================
+# 6. IDE & EDITOR FILES
+# ==========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# ==========================================
+# 7. TESTING & COVERAGE
+# ==========================================
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# ==========================================
+# 8. MACHINE LEARNING SPECIFIC
+# ==========================================
+# Weights & Biases logs
+wandb/
+runs/
+
+# TensorBoard logs
+logs/
+events.out.tfevents.*
+
+# ==========================================
+# 9. OS GENERATED FILES
+# ==========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ==========================================
+# 10. MISCELLANEOUS
+# ==========================================
+*.log
+*.tmp
+*.temp
