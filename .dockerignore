@@ -3,9 +3,11 @@
 venv/
 env/
 
-# Version control
+# Version control and Secrets
 .git/
 .gitignore
+.env
+.env.*
 
 # Python cache
 __pycache__/

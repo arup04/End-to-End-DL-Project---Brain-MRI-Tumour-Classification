@@ -32,14 +32,16 @@ venv.bak/
 # ==========================================
 # 4. PROJECT ARTIFACTS (DATA & MODELS)
 # ==========================================
-# Ignore the contents of the artifacts folder, 
-# but keep the directories tracked via .gitkeep
+# Ignore training datasets
 artifacts/data/*
 !artifacts/data/.gitkeep
 
+# Ignore models EXCEPT the best_model required for production UI
 artifacts/models/*
 !artifacts/models/.gitkeep
+!artifacts/models/best_model.pth
 
+# Ignore raw logs EXCEPT the .gitkeep
 artifacts/logs/*
 !artifacts/logs/.gitkeep
 
