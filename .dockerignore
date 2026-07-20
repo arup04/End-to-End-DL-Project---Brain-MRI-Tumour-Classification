@@ -1,0 +1,24 @@
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Version control
+.git/
+.gitignore
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Ignore the ENTIRE artifacts folder to prevent huge raw datasets from uploading
+artifacts/*
+
+# ...BUT explicitly INCLUDE the required production folders!
+!artifacts/models/
+!artifacts/logs/
