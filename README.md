@@ -668,7 +668,7 @@ This project is licensed under the **MIT License**.
 
 ## 🙏 Acknowledgments
 
-- **EfficientNet-B2** for feature extraction
+- **EfficientNet-B2** (fully fine-tuned in Google Colab)
 - **Grad-CAM++** for explainability
 - **Streamlit** for rapid web dashboard development
 - **AWS** for cloud deployment infrastructure
