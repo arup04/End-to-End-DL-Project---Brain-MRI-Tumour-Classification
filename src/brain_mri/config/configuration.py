@@ -35,6 +35,11 @@ except yaml.YAMLError as e:
 
 # Extract and validate values from configuration dictionaries
 try:
+    MODEL_NAME = model_config["model"]["architecture"]
+except KeyError as e:
+    raise KeyError(f"Missing required key 'architecture' under 'model' in {MODEL_YAML_PATH}") from e
+
+try:
     IMAGE_SIZE = model_config["model"]["image_size"]
 except KeyError as e:
     raise KeyError(f"Missing required key 'image_size' under 'model' in {MODEL_YAML_PATH}") from e

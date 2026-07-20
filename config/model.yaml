@@ -1,0 +1,7 @@
+model:
+  architecture: efficientnet_b2
+  num_classes: 4
+  image_size: 260
+
+weights:
+  path: artifacts/models/best_model.pth
