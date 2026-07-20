@@ -34,6 +34,25 @@ The classifier categorizes a brain MRI scan into one of four mutually exclusive 
 
 ---
 
+## 🖼️ Screenshots
+
+### Page 1 — Scan Analysis (Upload Screen)
+![App home — Scan Analysis upload screen](assets/image%201.png)
+
+### Page 2 — Model Performance & Analytics (Live on AWS EC2)
+![Model Performance and Analytics page running live on AWS EC2](assets/image%202.png)
+
+### Prediction Result — Meningioma (99.99% Confidence)
+![Prediction result showing Meningioma classified with 99.99% confidence](assets/image%203.png)
+
+### Grad-CAM++ Heatmap & Overlay
+![Grad-CAM++ heatmap and MRI overlay highlighting tumor region](assets/image%204.png)
+
+### Confidence Banner & Medical Disclaimer
+![High confidence banner and medical disclaimer displayed after prediction](assets/image%205.png)
+
+---
+
 ## 📊 Dataset
 
 This project uses the **[Brain Tumor MRI Dataset](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset)** by **Masoud Nickparvar**, publicly available on Kaggle.
@@ -96,46 +115,71 @@ artifacts/data/
 End-to-End-DL-Project---Brain-MRI-Tumour-Classification/
 │
 ├── .github/
-│   └── workflows/                  # GitHub Actions CI/CD pipeline (Future Work)
+│   └── workflows/                       # Placeholder for future GitHub Actions CI/CD
+│       └── .gitkeep
 │
 ├── artifacts/
-│   ├── logs/                       # Training logs, confusion matrix, learning curve plots
-│   │   ├── project_summary.json    # Test accuracy, best hyperparams, classification report
-│   │   ├── final_learning_curve.png
-│   │   └── confusion_matrix_optuna_final.png
+│   ├── logs/                            # Training outputs & evaluation artifacts
+│   │   ├── .gitkeep
+│   │   ├── project_summary.json         # Test accuracy, hyperparams, classification report
+│   │   ├── final_learning_curve.png     # Loss & accuracy curves from final training run
+│   │   ├── confusion_matrix_optuna_final.png
+│   │   └── Te-meTr_0009.jpg             # Sample MRI image used for testing
 │   └── models/
-│       └── best_model.pth          # Trained EfficientNet-B2 weights
+│       ├── .gitkeep
+│       ├── best_model.pth               # Trained EfficientNet-B2 weights (git-tracked)
+│       └── optuna_study.pkl             # Serialized Optuna study for HPO reproducibility
 │
 ├── config/
-│   ├── model.yaml                  # Architecture name, image size, weights path
-│   └── class_mapping.yaml          # Integer index → class name mapping
+│   ├── model.yaml                       # Architecture name, image size, weights path
+│   └── class_mapping.yaml              # Integer index → class name mapping (0→glioma…)
 │
 ├── notebooks/
-│   └── Brain_MRI_Training.ipynb    # End-to-end training, Optuna HPO, evaluation notebook
+│   ├── .gitkeep
+│   └── Brain_MRI_Training.ipynb        # End-to-end training, Optuna HPO, evaluation
 │
 ├── src/
-│   └── brain_mri/                  # Installable Python package (src-layout)
+│   └── brain_mri/                      # Installable Python package (src-layout)
 │       ├── __init__.py
-│       ├── cloud/                  # Cloud utility module (AWS S3 integration placeholder)
-│       ├── config/                 # Resolves paths, loads YAML configs, exposes constants
-│       ├── entity/                 # Config dataclasses
-│       ├── inference/              # Grad-CAM++ engine & Predictor
-│       └── utils/                  # Shared utility helpers
+│       ├── cloud/                      # Cloud integrations (S3 placeholder)
+│       │   └── __init__.py
+│       ├── config/                     # Path resolution & constants
+│       │   ├── __init__.py
+│       │   └── configuration.py        # Loads YAMLs, exposes MODEL_PATH, CLASS_NAMES, DEVICE…
+│       ├── entity/                     # Config dataclasses
+│       │   └── __init__.py
+│       ├── inference/                  # Inference & Explainable AI pipeline
+│       │   ├── __init__.py
+│       │   ├── gradcam.py              # Grad-CAM++ with skull masking & adaptive overlay
+│       │   └── predictor.py            # Model loader, image preprocessor, forward pass
+│       └── utils/                      # Shared utility helpers
+│           └── __init__.py
 │
 ├── tests/
-│   └── test_predictor.py           # Unit tests: preprocessing, inference, model loading
+│   ├── __init__.py
+│   └── test_predictor.py               # Unit tests: preprocessing, inference, model loading
 │
 ├── web/
-│   └── app.py                      # Streamlit dashboard (558 lines, modularized)
+│   └── app.py                          # Streamlit dashboard (558 lines, two-page UI)
 │
-├── .dockerignore                   # Excludes .venv, raw data, dev files from Docker context
-├── .env.example                    # Template for AWS credentials & EC2 config
-├── .gitignore                      # Excludes .venv, raw datasets, .env secrets
-├── Dockerfile                      # Optimized production container (python:3.12-slim + uv)
-├── pyproject.toml                  # PEP 621 project metadata & pinned dependencies (uv)
-├── uv.lock                         # Locked, reproducible dependency graph
-└── README.md                       # This file
+├── assets/                             # Screenshots & demo images for README
+│   ├── image 1.png                     # App home — Scan Analysis upload screen
+│   ├── image 2.png                     # Model Performance & Analytics page (AWS live)
+│   ├── image 3.png                     # Prediction result — Meningioma 99.99%
+│   ├── image 4.png                     # Grad-CAM++ heatmap + overlay
+│   └── image 5.png                     # Confidence banner & medical disclaimer
+│
+├── .dockerignore                        # Excludes .venv, raw data, secrets from Docker context
+├── .env.example                         # Template for AWS credentials & EC2 config
+├── .gitignore                           # Excludes .venv, raw datasets, .env secrets
+├── .python-version                      # Pins Python 3.12 for uv/pyenv
+├── Dockerfile                           # Production container (python:3.12-slim + uv)
+├── LICENSE                              # MIT License
+├── pyproject.toml                       # PEP 621 project metadata & locked dependencies (uv)
+├── README.md                            # This file
+└── uv.lock                              # Fully reproducible dependency graph
 ```
+
 
 ---
 
@@ -415,23 +459,100 @@ docker rm brain-mri-app
 
 ---
 
-## 🧠 Model Performance
+## 🔬 Hyperparameter Optimization with Optuna
 
-| Parameter              | Value           |
-|------------------------|-----------------|
-| Architecture           | EfficientNet-B2 |
-| Validation Loss        | 0.0725          |
-| Training Epochs        | 15              |
-| Optuna Trials          | 10              |
-| Backbone Learning Rate | 5.40e-05        |
-| Head Learning Rate     | 1.59e-03        |
-| Weight Decay           | 2.61e-04        |
-| Batch Size             | 64              |
-| Unfrozen Blocks        | 4               |
-| Image Size             | 260×260         |
-| Explainability         | Grad-CAM++      |
+Automated Bayesian hyperparameter search was performed using **[Optuna](https://optuna.org/)** to find the optimal training configuration for EfficientNet-B2.
+
+### Optuna Configuration
+
+| Setting             | Value                                      |
+|---------------------|--------------------------------------------|
+| **Sampler**         | `TPESampler` (Tree-structured Parzen Estimator) |
+| **Pruner**          | `MedianPruner` (n_startup_trials=5, n_warmup_steps=5) |
+| **Direction**       | Minimize validation loss                   |
+| **Total Trials**    | 10                                         |
+| **Max Epochs / Trial** | 3 (with early pruning)                 |
+| **Seed**            | 42 (for reproducibility)                   |
+| **Study Name**      | `efficientnet_b2_hpt`                      |
+
+### Search Space
+
+```python
+backbone_lr      = trial.suggest_float('backbone_lr', 1e-6, 1e-4, log=True)
+head_lr          = trial.suggest_float('head_lr', 1e-4, 1e-2, log=True)
+weight_decay     = trial.suggest_float('weight_decay', 1e-5, 1e-3, log=True)
+batch_size       = trial.suggest_categorical('batch_size', [32, 64])
+unfreeze_blocks  = trial.suggest_int('unfreeze_blocks', 2, 4)
+scheduler_patience = trial.suggest_int('scheduler_patience', 2, 5)
+```
+
+### Optimizer Setup (Dual Learning Rate)
+
+Each trial used **AdamW** with separate learning rates for backbone and classification head — a standard fine-tuning best practice:
+
+```python
+optimizer = torch.optim.AdamW([
+    {'params': backbone_params, 'lr': backbone_lr},   # Slow — pretrained features
+    {'params': head_params,     'lr': head_lr},        # Fast — new classification head
+], weight_decay=weight_decay)
+
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+    optimizer, mode='min', factor=0.1, patience=scheduler_patience
+)
+```
+
+### Experiment Tracking
+
+All 10 trial runs were tracked individually in **Weights & Biases (W&B)** and grouped under a single sweep. Per-trial metrics logged: `train_loss`, `train_acc`, `val_loss`, `val_acc` per epoch.
+
+Optuna visualizations logged to W&B:
+- Optimization history
+- Parameter importances
+- Parallel coordinate plot
+- Slice plots & contour plots
+- EDF (Empirical Distribution Function) plot
+
+The full study was serialized and saved to `artifacts/models/optuna_study.pkl` via `joblib` for reproducibility.
 
 ---
+
+## 🧠 Model Performance & Results
+
+After HPO, the best trial's hyperparameters were used to retrain the final model on a **90/10 train/val split** for **15 epochs**.
+
+### Best Hyperparameters (from Optuna)
+
+| Hyperparameter         | Search Range             | Best Value    |
+|------------------------|--------------------------|---------------|
+| Backbone Learning Rate | `1e-6` → `1e-4` (log)   | `5.40e-05`    |
+| Head Learning Rate     | `1e-4` → `1e-2` (log)   | `1.59e-03`    |
+| Weight Decay           | `1e-5` → `1e-3` (log)   | `2.61e-04`    |
+| Batch Size             | `{32, 64}`               | `64`          |
+| Unfrozen Blocks        | `2` → `4`                | `4`           |
+| Scheduler Patience     | `2` → `5`                | `2`           |
+
+### Final Training Summary
+
+| Metric                  | Value                |
+|-------------------------|----------------------|
+| Architecture            | EfficientNet-B2      |
+| Image Size              | 260 × 260 px         |
+| Final Training Epochs   | 15                   |
+| Best Validation Loss    | **0.0725**           |
+| **Test Accuracy**       | **99.08%**           |
+| Explainability          | Grad-CAM++           |
+
+### Per-Class Classification Report (Test Set — 1,311 images)
+
+| Class       | Precision | Recall  | F1-Score | Support |
+|-------------|-----------|---------|----------|---------|
+| Glioma      | 99.66%    | 97.67%  | 98.65%   | 300     |
+| Meningioma  | 97.42%    | 98.69%  | 98.05%   | 306     |
+| No Tumor    | 99.75%    | 100.00% | 99.88%   | 405     |
+| Pituitary   | 99.34%    | 99.67%  | 99.50%   | 300     |
+| **Macro Avg** | **99.04%** | **99.01%** | **99.02%** | **1311** |
+
+
 
 ## 🔭 Future Roadmap: CI/CD Automation
 
