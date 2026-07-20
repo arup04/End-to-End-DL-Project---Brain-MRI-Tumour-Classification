@@ -22,3 +22,7 @@ artifacts/*
 # ...BUT explicitly INCLUDE the required production folders!
 !artifacts/models/
 !artifacts/logs/
+
+# Ignore development directories not needed for production inference
+notebooks/
+tests/
